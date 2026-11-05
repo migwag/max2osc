@@ -191,3 +191,7 @@ needs a real Windows test: that the headset's vendor interface (usage page
 `0xFF13`) is found, that the enable command is accepted, and that Audeze's own
 software does not hold the headset. Run `tools/selftest.py` and
 `tools/check_convention.py` first.
+
+## License
+
+MIT -- see [LICENSE](LICENSE).
