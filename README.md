@@ -192,6 +192,7 @@ needs a real Windows test: that the headset's vendor interface (usage page
 software does not hold the headset. Run `tools/selftest.py` and
 `tools/check_convention.py` first.
 
-## License
+## Licence
 
-MIT -- see [LICENSE](LICENSE).
+[MIT](LICENSE). "Audeze" and "Maxwell" are trademarks of Audeze LLC, used here
+only to say what hardware this talks to.
