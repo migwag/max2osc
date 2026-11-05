@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+
+# PyInstaller output
+build/
+dist/
+
+# icon build scratch
+.build-iconset/
+
+.DS_Store

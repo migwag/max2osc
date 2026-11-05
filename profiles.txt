@@ -1,0 +1,100 @@
+# Profiles for Max2OSC, in Supperware Bridgehead's profile.txt format:
+#   https://supperware.net/headtracker/profile-txt/
+#
+# Each profile is four or more lines -- name, OSC address, parameters, then
+# one or more destinations -- separated by a blank line. Lines starting with
+# # are comments and can go anywhere.
+#
+# ADDRESSES
+#   /[a,b,c]  sends a separate message per name: /a, /b, /c. One value each,
+#             which is the form a DAW or plugin can bind to a control.
+#   /abc      sends a single message carrying all the values as an array.
+#
+# PARAMETERS
+#   Angles      yaw, pitch, roll -- degrees unless a suffix says otherwise
+#   Quaternion  qw, qx, qy, qz
+#               Use angles or quaternion components, not both.
+#   Suffixes    :r radians   :1 maps to -1..1   :0 maps to 0..1
+#   Modifiers   leading -  reverses      each trailing _  adds 90 degrees
+#               so -yaw__ is reversed yaw plus 180
+#   Padding     0 sends a zero, s:text sends a constant string
+#
+# INBOUND CONTROL (optional)
+#   Uncomment to let other software recentre the tracker over OSC. Send
+#   /zero to this port to reset centre, or /connect with 0, 1 or no
+#   argument to disconnect, connect or toggle. Works from a DAW, a phone
+#   app or a Stream Deck -- anything that speaks OSC.
+# rx=9010
+#
+# DESTINATIONS
+#   "local 8000", "127.0.0.1 8000" or just "8000". One per line; data goes
+#   to all of them.
+
+SceneRotator (degrees)
+/SceneRotator/[yaw,pitch,roll]
+yaw,pitch,roll
+local 8000
+
+Yaw/Pitch/Roll (degrees)
+/[yaw,pitch,roll]
+yaw,pitch,roll
+local 8000
+
+Yaw/Pitch/Roll (-1 to 1)
+/[yaw,pitch,roll]
+yaw:1,pitch:1,roll:1
+local 8000
+
+Yaw/Pitch/Roll (0 to 1)
+/[yaw,pitch,roll]
+yaw:0,pitch:0,roll:0
+local 8000
+
+Yaw/Pitch/Roll (radians)
+/head/[yaw,pitch,roll]
+yaw:r,pitch:r,roll:r
+local 8000
+
+Composite YPR (one message, degrees)
+/ypr
+yaw,pitch,roll
+local 8000
+
+# Nuendo's HeadPose expects seven floats: four padding zeros, then the
+# three angles negated. "25Hz" is only a label -- the format has no rate
+# field, so set Send rate to 25 in the OSC tab.
+Nuendo (HeadPose, 25Hz)
+/head_pose
+0,0,0,0,-pitch,-yaw,-roll
+local 7000
+
+Audio Brewers
+/[yaw,pitch,roll]
+yaw:0,pitch:0,roll:0
+local 8585
+
+# Verified against APL Virtuoso: this is the line that matches what
+# Bridgehead sends to it. Different binauralisers expect different
+# conventions, so keep one profile per plugin rather than hunting for a
+# single "correct" one. osc_sweep.py identifies a new plugin's convention.
+APL Virtuoso
+/Virtuoso/quat
+qw,qy,-qx,qz
+local 8000
+
+Quaternion xyzw (one message)
+/quaternion
+qx,qy,qz,qw
+local 8000
+
+Quaternion wxyz (one message)
+/quaternion
+qw,qx,qy,qz
+local 8000
+
+# Reproduces the component order the original Nxosc 1.0.5 sent, for setups
+# built around it. The reordering is what Bridgehead's naming requires.
+Nxosc 1.0.5 quaternion (legacy)
+/nxosc/quaternion
+qx,qz,-qy,qw
+local 8000
