@@ -12,10 +12,18 @@ profiles, smoothing and send rate, and **the same OSC output for the same
 head pose**. A `profiles.txt` written for Bridgehead or NXOSC Reborn works
 here unchanged.
 
-Unofficial and not affiliated with Audeze. The headset's head-tracking
-protocol was reverse engineered for interoperability; it is documented in the
+The headset's head-tracking protocol is documented in the
 [maxwell2-ht](https://github.com/migwag/maxwell2-ht) project, which also
 provides a Dolby Atmos Renderer plugin. Both can track at the same time.
+
+## Disclaimer
+
+This is an independent, unofficial project. It is **not affiliated with,
+endorsed by, or supported by Audeze LLC**. "Audeze", "Maxwell" and
+"Maxwell 2 ANC" are used only to identify the hardware this app works with.
+The headset's head-tracking protocol was reverse engineered for
+interoperability. Use it at your own risk; for support with the headset
+itself, contact Audeze, but do not ask them about this app.
 
 ---
 
@@ -86,6 +94,43 @@ needs right-click > Open the first time.
 `tools/selftest.py` checks the whole path without the GUI -- headset, worker,
 profile, OSC -- including send-rate thinning and Reset Center. It needs the
 headset connected.
+
+## Building with Claude Code
+
+If you would rather not run the commands yourself,
+[Claude Code](https://claude.com/claude-code) can set up the environment,
+build the app and check it for you. It reads this README and the source,
+runs the steps, and asks before it changes anything outside the project
+folder.
+
+1. **Prerequisites.** A Mac, Python 3.10 or newer from
+   [python.org](https://www.python.org/downloads/macos/) (its Tkinter works
+   once bundled), and Claude Code (the `claude` command in Terminal, or the
+   Code tab in the Claude desktop app).
+2. **Get the code.**
+   ```
+   git clone https://github.com/migwag/max2osc.git
+   cd max2osc
+   ```
+3. **Start Claude Code in that folder** (`claude` in Terminal, or choose the
+   folder in the desktop app) and ask, for example:
+
+   > Create the virtual environment, build Max2OSC.app with build_app.sh,
+   > run tools/selftest.py against my headset, and copy the app to
+   > /Applications.
+
+   Connect the headset by cable or plug in the dongle first, so the self-test
+   can find it.
+4. **Open Max2OSC** from Applications. It connects to the headset by itself.
+
+Other useful requests:
+
+- *"Run tools/check_convention.py so I can check the directions with my
+  head."* It speaks the prompts.
+- *"Add a profile for <plugin> that listens on port <n>."* Profiles follow
+  [Supperware's format](https://supperware.net/headtracker/profile-txt/).
+- *"The app starts and disappears -- find out why."* A bundled app hides its
+  errors; Claude Code can run the binary inside it to see them.
 
 ## How it relates to NXOSC Reborn
 
