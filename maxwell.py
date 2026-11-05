@@ -1,5 +1,5 @@
 """
-Audeze Maxwell 2 head tracking over HID -- protocol and device access.
+Audeze Maxwell 2 ANC head tracking over HID -- protocol and device access.
 
 The headset fuses its IMU itself and streams a unit quaternion. It is reached
 either by USB cable or through the Maxwell USB dongle; both expose the same
@@ -22,7 +22,7 @@ VENDOR_ID = 0x3329
 VENDOR_USAGE_PAGE = 0xFF13
 VENDOR_USAGE = 1
 
-PID_HEADSET = 0x4BAA      # Maxwell 2 on the USB cable
+PID_HEADSET = 0x4BAA      # Maxwell 2 ANC on the USB cable
 PID_DONGLE = 0x4BA9       # Maxwell USB dongle (wireless)
 PRODUCTS = {PID_HEADSET: "Maxwell 2 (USB cable)", PID_DONGLE: "Maxwell 2 (USB dongle)"}
 

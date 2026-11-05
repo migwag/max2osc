@@ -1,7 +1,7 @@
 """
-Maxwell 2 orientation -> the values a Bridgehead profile can reference.
+Maxwell 2 ANC orientation -> the values a Bridgehead profile can reference.
 
-The Maxwell 2 reports a unit quaternion (w, x, y, z) in a right-handed frame
+The Maxwell 2 ANC reports a unit quaternion (w, x, y, z) in a right-handed frame
 with x forward, y left and z up. Max2OSC re-expresses it in the component
 frame NXOSC Reborn decodes the Waves Nx tracker into, then runs NXOSC Reborn's
 own conversion unchanged. Both apps therefore send identical OSC for the same

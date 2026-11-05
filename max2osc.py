@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Max2OSC -- Audeze Maxwell 2 head tracking to OSC, with a GUI.
+Max2OSC -- Audeze Maxwell 2 ANC head tracking to OSC, with a GUI.
 
-The counterpart of NXOSC Reborn for the Maxwell 2: the same Tracker and OSC
+The counterpart of NXOSC Reborn for the Maxwell 2 ANC: the same Tracker and OSC
 tabs, the same Supperware Bridgehead profiles, smoothing and send rate, and
 the same OSC output for the same head pose. Only the tracker side differs --
 the headset is read over USB HID, by cable or through the Maxwell dongle,

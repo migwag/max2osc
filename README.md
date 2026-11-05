@@ -1,8 +1,8 @@
 # Max2OSC
 
-Head tracking from the **Audeze Maxwell 2** to **OSC**, on macOS.
+Head tracking from the **Audeze Maxwell 2 ANC** to **OSC**, on macOS.
 
-The Maxwell 2 has a head tracker built in. This app reads it over USB --
+The Maxwell 2 ANC has a head tracker built in. This app reads it over USB --
 with the headset on its cable or through the Maxwell USB dongle -- and sends
 the orientation as OSC, so binaural and immersive tools can follow your head.
 
