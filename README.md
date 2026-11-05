@@ -50,9 +50,12 @@ opens your own `profiles.txt`; **Reload** re-reads it. An `rx=PORT` line
 opens an inbound port where `/zero` resets centre and `/connect` 0/1
 disconnects or connects.
 
-Directions follow Bridgehead: **yaw** positive turning left, **pitch**
-positive tipping up, **roll** positive tipping toward the right shoulder.
-If a plugin moves the wrong way, put a `-` in front of that parameter.
+Directions match NXOSC Reborn, which was tuned against the Bridgehead app:
+**yaw** positive turning right, **pitch** positive tipping up, **roll**
+positive tipping toward the right shoulder. (Bridgehead's written
+documentation calls a left turn positive yaw; the app behaves as above.)
+`tools/check_convention.py` measures this with spoken prompts. If a plugin
+moves the wrong way, put a `-` in front of that parameter.
 
 **Smoothing** low-passes the orientation (40-80 ms is a good start).
 **Send rate** thins the output for receivers that cannot keep up; `0` sends
@@ -97,9 +100,10 @@ headset connected.
 The Maxwell reports a quaternion with x forward, y left, z up.
 `orientation.maxwell_to_nx` re-expresses it in the frame NXOSC Reborn decodes
 the Nx into, and from there the conversion is NXOSC Reborn's own, so both
-apps agree. The mapping was solved by checking every signed axis permutation
-against NXOSC Reborn's code for known left, up and right-shoulder rotations;
-exactly one fits.
+apps agree -- angles and quaternion alike. The mapping was solved by checking
+every signed axis permutation against NXOSC Reborn's code for known right,
+up and right-shoulder rotations; exactly one fits, and it was confirmed by
+comparing the two apps side by side.
 
 Two things matter on macOS. hidapi opens devices exclusively by default,
 which would lock the Dolby Atmos Renderer plugin out, so `maxwell.py` turns

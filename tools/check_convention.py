@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """
-Check Max2OSC's yaw/pitch/roll signs against Bridgehead's documented convention.
+Check Max2OSC's yaw/pitch/roll signs against NXOSC Reborn's convention,
+which was tuned against the Bridgehead app in practice:
 
-Bridgehead specifies (https://supperware.net/headtracker/profile-txt/):
+    yaw    positive turning your head RIGHT
+    pitch  positive tipping your head UP
+    roll   positive tipping your head toward your RIGHT shoulder
 
-    yaw    anticlockwise positive   -- turning your head LEFT
-    pitch  upward positive          -- tipping your head UP
-    roll   clockwise positive       -- tipping your head toward your RIGHT
-                                       shoulder, seen from behind
+(Bridgehead's written documentation calls a left turn positive yaw; the app
+behaves as above.)
 
 Measures the values profiles send (not the Tracker tab readouts) for one
 gesture per axis. It speaks the prompts, so you need not watch the screen.
@@ -28,7 +29,7 @@ HOLD = 2.5
 SETTLE = 1.5
 
 GESTURES = [
-    ("yaw", "Turn your head to the LEFT and hold"),
+    ("yaw", "Turn your head to the RIGHT and hold"),
     ("pitch", "Tip your head UP and hold"),
     ("roll", "Tip your head toward your RIGHT shoulder and hold"),
 ]
@@ -72,7 +73,7 @@ def main():
     speak("Done. Back to centre.")
     device.close()
 
-    print("\nBridgehead expects each gesture to move its own axis positive.")
+    print("\nEach gesture should move its own axis positive.")
     ok = True
     for axis, _ in GESTURES:
         m = results[axis]
@@ -81,7 +82,7 @@ def main():
         ok &= good
         print(f"  {axis:5s}: {m[axis]:+6.1f} deg  "
               + ("ok" if good else f"WRONG (largest was {biggest} {m[biggest]:+.1f})"))
-    print("\nAll three match Bridgehead." if ok else "\nSome axes do not match.")
+    print("\nAll three match NXOSC Reborn." if ok else "\nSome axes do not match.")
 
 
 if __name__ == "__main__":

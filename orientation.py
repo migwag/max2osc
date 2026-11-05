@@ -6,11 +6,14 @@ with x forward, y left and z up. Max2OSC re-expresses it in the component
 frame NXOSC Reborn decodes the Waves Nx tracker into, then runs NXOSC Reborn's
 own conversion unchanged. Both apps therefore send identical OSC for the same
 head pose, and a profiles.txt behaves the same in either -- and in Supperware's
-Bridgehead, whose convention NXOSC Reborn follows:
+Bridgehead, which NXOSC Reborn was tuned against in practice:
 
-    yaw    positive turning the head LEFT
+    yaw    positive turning the head RIGHT
     pitch  positive tipping the head UP
     roll   positive tipping toward the RIGHT shoulder
+
+Bridgehead's written documentation calls a left turn positive yaw; NXOSC
+Reborn follows how the Bridgehead app behaves, and so does this app.
 
 euler_mode4/6, derive, bridgehead_quaternion, profile_values_from and Smoother
 are copied from NXOSC Reborn's nx_protocol.py; keep them in step with it.
@@ -43,14 +46,14 @@ def relative(zero, q):
 def maxwell_to_nx(q):
     """Maxwell (w, x, y, z) -> NXOSC Reborn's (a, b, c, w).
 
-    Solved by trying every signed axis permutation against NXOSC Reborn's
-    derive() + profile_values_from() with single-axis rotations of known
-    direction; this is the only one that yields positive yaw, pitch and roll
-    for left, up and right-shoulder. It is a reflection: the Nx frame carries
-    the inverse rotation with its axes permuted.
+    A proper rotation of the axes, chosen so that NXOSC Reborn's derive() +
+    profile_values_from() give positive yaw, pitch and roll for turning
+    right, tipping up and tipping toward the right shoulder -- what NXOSC
+    Reborn sends with the Nx for the same movements. Of the 48 signed axis
+    permutations, this is the only one that does.
     """
     w, x, y, z = q
-    return -y, -z, -x, w
+    return -y, z, -x, w
 
 
 # ----------------------------------------------- copied from nx_protocol.py
