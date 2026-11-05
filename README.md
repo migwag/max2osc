@@ -22,8 +22,7 @@ This is an independent, unofficial project. It is **not affiliated with,
 endorsed by, or supported by Audeze LLC**. "Audeze", "Maxwell" and
 "Maxwell 2 ANC" are used only to identify the hardware this app works with.
 The headset's head-tracking protocol was reverse engineered for
-interoperability. Use it at your own risk; for support with the headset
-itself, contact Audeze, but do not ask them about this app.
+interoperability. Use it at your own risk.
 
 ---
 
@@ -32,6 +31,10 @@ itself, contact Audeze, but do not ask them about this app.
 Connect the headset by cable or plug in the dongle, and start Max2OSC. It
 connects by itself -- there is no pairing -- and reconnects if you unplug,
 switch between cable and dongle, or the headset sleeps.
+
+The dongle is the preferred connection: it delivers fresh orientation data
+more consistently, while the cable connection repeats stale samples more
+often, which makes tracking less smooth.
 
 The **Tracker** tab shows the device, how it is connected, the live
 orientation, and the stream rate. **Reset Center** makes your current head
