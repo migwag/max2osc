@@ -1,0 +1,85 @@
+name: build
+
+# Builds standalone apps for macOS and Windows. PyInstaller cannot
+# cross-compile, so each runs on its own OS. tools/check_offline.py needs no
+# headset, so CI verifies the orientation mapping, the HID protocol helpers
+# and the shipped profiles rather than just that the code compiles.
+#
+# Windows builds are produced but have not been tested with a headset yet.
+#
+# Pushing a tag like v0.1.0 also publishes a pre-release with both builds
+# attached.
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            artifact: Max2OSC-macOS
+          - os: windows-latest
+            artifact: Max2OSC-Windows
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt -r requirements-dev.txt
+
+      - name: Offline checks (mapping, HID protocol, profiles)
+        run: python tools/check_offline.py
+
+      - name: Build
+        run: pyinstaller --noconfirm --clean Max2OSC.spec
+
+      # Archive on the build machine. actions/upload-artifact does not keep
+      # the executable bit or symlinks, which would quietly break a macOS
+      # .app; ditto preserves both.
+      - name: Package (macOS)
+        if: runner.os == 'macOS'
+        run: ditto -c -k --keepParent "dist/Max2OSC.app" "${{ matrix.artifact }}.zip"
+
+      - name: Package (Windows)
+        if: runner.os == 'Windows'
+        run: Compress-Archive -Path dist/Max2OSC -DestinationPath "${{ matrix.artifact }}.zip"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: ${{ matrix.artifact }}.zip
+
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: downloaded
+          merge-multiple: true
+
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ls -lh downloaded
+          gh release create "${GITHUB_REF_NAME}" downloaded/*.zip \
+            --title "Max2OSC ${GITHUB_REF_NAME}" \
+            --notes-file .github/RELEASE_NOTES.md \
+            --prerelease

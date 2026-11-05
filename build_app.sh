@@ -39,6 +39,7 @@ print(f"preflight ok: {sys.executable}")
 PREFLIGHT
 
 "$PY" -m pip install --quiet -r requirements.txt -r requirements-dev.txt
+"$PY" tools/check_offline.py >/dev/null || { echo "Offline checks failed -- not building." >&2; "$PY" tools/check_offline.py; exit 1; }
 "$PY" -m PyInstaller --noconfirm --clean Max2OSC.spec
 echo
 echo "built: $(ls -d dist/Max2OSC* | head -1)"

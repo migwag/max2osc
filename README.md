@@ -1,6 +1,7 @@
 # Max2OSC
 
-Head tracking from the **Audeze Maxwell 2 ANC** to **OSC**, on macOS.
+Head tracking from the **Audeze Maxwell 2 ANC** to **OSC**, on macOS -- and,
+not yet tested, on Windows.
 
 The Maxwell 2 ANC has a head tracker built in. This app reads it over USB --
 with the headset on its cable or through the Maxwell USB dongle -- and sends
@@ -23,6 +24,11 @@ endorsed by, or supported by Audeze LLC**. "Audeze", "Maxwell" and
 "Maxwell 2 ANC" are used only to identify the hardware this app works with.
 The headset's head-tracking protocol was reverse engineered for
 interoperability. Use it at your own risk.
+
+> **Windows has not been tested yet.** Max2OSC is developed and tested on
+> macOS. The code and build are set up for Windows and the Windows build
+> passes the automated checks, but it has never been run with a Maxwell 2 ANC
+> on a Windows PC. Expect rough edges, and please report what happens.
 
 ---
 
@@ -76,23 +82,43 @@ every packet, about 60 Hz.
 
 ## Running from source
 
+macOS:
+
 ```
 python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
 .venv/bin/python max2osc.py
 ```
 
-Needs Python 3.10 or newer with a working Tkinter (the python.org installer
-has one).
+Windows (untested):
+
+```
+py -m venv .venv
+.venv\Scripts\pip install -r requirements.txt
+.venv\Scripts\python max2osc.py
+```
+
+Needs Python 3.10 or newer with a working Tkinter (the python.org installers
+have one). `tools/check_offline.py` runs the checks that need no headset.
 
 ## Building the app
 
+PyInstaller builds for the platform it runs on, so build each on its own OS.
+
 ```
-./build_app.sh            # -> dist/Max2OSC.app
+./build_app.sh            # macOS   -> dist/Max2OSC.app
+build_app.bat             # Windows -> dist\Max2OSC\Max2OSC.exe   (untested)
 ```
 
-The bundle is ad-hoc signed: fine on the Mac that built it; elsewhere it
-needs right-click > Open the first time.
+The macOS bundle is ad-hoc signed: fine on the Mac that built it; elsewhere
+it needs right-click > Open the first time. On Windows, keep `Max2OSC.exe`
+together with the `_internal` folder beside it; SmartScreen may warn on first
+run (**More info > Run anyway**).
+
+Without a Windows PC to build on, use GitHub Actions instead
+(`.github/workflows/build.yml`): every push builds both platforms, runs the
+offline checks on each, and keeps the zips as workflow artifacts. Pushing a
+tag such as `v0.1.0` publishes them as a pre-release.
 
 `tools/selftest.py` checks the whole path without the GUI -- headset, worker,
 profile, OSC -- including send-rate thinning and Reset Center. It needs the
@@ -158,5 +184,10 @@ which would lock the Dolby Atmos Renderer plugin out, so `maxwell.py` turns
 that off. And through the dongle, commands carry a routing flag (`0x80`) or
 the headset ignores them.
 
-Not yet tried on Windows. hidapi and Tkinter both work there, so it may well
-run from source, but the HID behaviour has only been verified on macOS.
+On Windows, HID devices are shared between programs by default, so there is
+nothing to turn off; the macOS-only parts (the menu bar icon, exclusive-open
+switch) do nothing there, and closing the window quits the app. What still
+needs a real Windows test: that the headset's vendor interface (usage page
+`0xFF13`) is found, that the enable command is accepted, and that Audeze's own
+software does not hold the headset. Run `tools/selftest.py` and
+`tools/check_convention.py` first.
