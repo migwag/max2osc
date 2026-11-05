@@ -24,7 +24,7 @@ VENDOR_USAGE = 1
 
 PID_HEADSET = 0x4BAA      # Maxwell 2 ANC on the USB cable
 PID_DONGLE = 0x4BA9       # Maxwell USB dongle (wireless)
-PRODUCTS = {PID_HEADSET: "Maxwell 2 (USB cable)", PID_DONGLE: "Maxwell 2 (USB dongle)"}
+PRODUCTS = {PID_HEADSET: "Maxwell 2 ANC (USB cable)", PID_DONGLE: "Maxwell 2 ANC (USB dongle)"}
 
 REPORT_ENABLE = 0x06
 REPORT_QUAT = 0x0A
